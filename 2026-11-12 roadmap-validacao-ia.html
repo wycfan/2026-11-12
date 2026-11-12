@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmap de validação clínica de IA</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* Regra do roadmap: uma resposta só gera itens quando a coluna de referência ao lado dela não está vazia.
+   Paleta: cinzas frios com acento azul-aço. Formulário à esquerda, roadmap à direita. */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --ink:#1e2633; --muted:#5f6b7a; --line:#d9dee6;
+  --accent:#2f6fb0; --accent-soft:#e4ecf5; --warn:#8a5a00; --warn-soft:#fdf0d5; --focus:#d89b2b;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f141c; --surface:#161d27; --ink:#e3e8ef; --muted:#98a2b3; --line:#2a3340;
+    --accent:#7fa8d6; --accent-soft:#1c2735; --warn:#f2c46d; --warn-soft:#3a2d12; --focus:#e0b25a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f141c; --surface:#161d27; --ink:#e3e8ef; --muted:#98a2b3; --line:#2a3340;
+  --accent:#7fa8d6; --accent-soft:#1c2735; --warn:#f2c46d; --warn-soft:#3a2d12; --focus:#e0b25a;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+.abas{display:flex;gap:4px;margin-top:14px;border-bottom:1px solid var(--line)}
+.abas a{padding:8px 12px;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
+.abas a[aria-current="page"]{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.55 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"IBM Plex Serif",Georgia,serif;font-weight:600;line-height:1.25;text-wrap:balance;margin:0}
+h1{font-size:1.9rem}
+h2{font-size:1.25rem}
+h3{font-size:1.02rem}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 18px 48px}
+header{margin-bottom:22px}
+header p{color:var(--muted);max-width:70ch;margin:8px 0 0}
+.aviso-geral{margin-top:12px;font-size:.92rem;border-left:3px solid var(--accent);padding:4px 0 4px 12px}
+.layout{display:grid;grid-template-columns:minmax(300px,1fr) minmax(0,1.5fr);gap:22px;align-items:start}
+@media (max-width:860px){.layout{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.card h2{margin-bottom:12px}
+#form{display:flex;flex-direction:column;gap:14px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{font-weight:500;font-size:.95rem;margin-bottom:6px;padding:0;text-wrap:pretty}
+.opt{display:flex;gap:9px;align-items:flex-start;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:.93rem}
+.opt:hover{background:var(--accent-soft)}
+.opt input{margin-top:4px;accent-color:var(--accent)}
+.opt small{display:block;color:var(--muted);font-size:.85rem}
+.bloco-nivel{border-bottom:1px solid var(--line);padding-bottom:12px}
+.lista{margin:6px 0 10px;padding-left:20px;font-size:.93rem;display:flex;flex-direction:column;gap:4px}
+.pergunta{font-weight:500;margin:10px 0 4px;font-size:.95rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.chip{background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:3px 11px;font-size:.85rem;font-weight:500}
+.alert{border-radius:8px;padding:10px 12px;margin:0 0 12px;font-size:.93rem;background:var(--warn-soft);color:var(--warn)}
+.grupo{border-top:1px solid var(--line);padding:14px 0 4px}
+.grupo:first-child{border-top:0;padding-top:0}
+.resp{color:var(--muted);margin:4px 0 6px;font-size:.93rem}
+.nota{color:var(--accent);font-weight:500;font-size:.93rem;margin:0 0 6px;white-space:pre-line}
+.itens{list-style:none;padding:0;margin:6px 0 0;display:flex;flex-direction:column;gap:3px}
+.itens label{display:flex;gap:10px;align-items:flex-start;padding:5px 6px;border-radius:6px;cursor:pointer}
+.itens label:hover{background:var(--accent-soft)}
+.itens input{margin-top:5px;accent-color:var(--accent);flex:none}
+.itens input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.itens .sub{margin:4px 0 0 26px}
+.itens .bloco{padding:4px 0}
+.vazio{color:var(--muted)}
+.motivo{color:var(--muted);font-size:.9em}
+.term{font:inherit;color:var(--accent);background:none;border:0;border-bottom:1px dotted var(--accent);padding:0;cursor:help}
+.term:hover{background:var(--accent-soft)}
+.hint{position:relative;color:var(--accent);border-bottom:1px dashed var(--accent);cursor:help;outline-offset:2px}
+.hint::after{content:"i";display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;background:var(--accent);color:var(--surface);font-size:.7rem;font-weight:600;margin-left:5px;vertical-align:1px}
+.hint-pop{display:none;position:absolute;left:0;top:calc(100% + 8px);z-index:5;width:min(340px,80vw);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:.88rem;font-weight:400;line-height:1.45;box-shadow:0 10px 28px rgba(0,0,0,.2);white-space:normal}
+.hint:hover .hint-pop,.hint:focus .hint-pop{display:block}
+#over{position:fixed;inset:0;background:rgba(10,14,15,.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:10}
+#over.on{display:flex}
+#pop{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;max-width:480px;width:100%;padding:18px 20px;box-shadow:0 12px 36px rgba(0,0,0,.25)}
+#pop h3{margin-bottom:6px}
+#pop p{margin:0 0 12px}
+button.btn{font:inherit;font-size:.9rem;background:var(--accent);color:var(--surface);border:0;border-radius:6px;padding:7px 14px;cursor:pointer}
+button.btn.sec{background:none;color:var(--accent);border:1px solid var(--line)}
+#msg{font-size:.85rem;color:var(--muted)}
+.acoes{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:14px}
+dl.gloss{display:grid;grid-template-columns:minmax(160px,220px) 1fr;gap:10px 16px;margin:0}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+@media (max-width:560px){dl.gloss{grid-template-columns:1fr}}
+.rodape{margin-top:24px;font-size:.85rem;color:var(--muted);max-width:75ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Impressão: só o roadmap, sem formulário, abas, botões e overlays */
+@media print{
+  body{background:#fff;color:#000}
+  .wrap{padding:0;max-width:none}
+  .abas,.acoes,.aviso-geral,.rodape,#v-glossario,section[aria-labelledby="h-perg"],.chips,#over{display:none!important}
+  .layout{display:block}
+  .card{border:0;padding:0;background:#fff}
+  .hint::after{display:none}
+  .hint-pop{display:none!important}
+  .hint,.term{color:#000;border-bottom-color:#000}
+  .grupo{break-inside:avoid;page-break-inside:avoid}
+  .itens input:checked + span{text-decoration:none;color:#000}
+  .itens label:hover{background:none}
+  .nota,.resp,.motivo{color:#000}
+  a{color:#000}
+  a::after{content:" (" attr(href) ")";font-size:.8em;word-break:break-all}
+  .alert{background:#fff;color:#000;border:1px solid #000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Roadmap de validação clínica de IA em saúde</h1>
+    <p>Responda às perguntas sobre seu projeto. O roadmap lista apenas os checklists e normas ligados às suas respostas. Termos destacados em azul abrem a definição ao clicar.</p>
+    <p class="aviso-geral">Esta ferramenta orienta o planejamento com base nas suas respostas e não substitui a análise do CEP ou da Instância Nacional de Ética em Pesquisa (INAEP), a avaliação da ANVISA, a orientação jurídica nem a revisão de especialistas em regulação, ética em pesquisa, proteção de dados, ciência de dados e metodologia de pesquisa clínica. A classe de risco, a aplicabilidade de cada norma e os procedimentos vigentes devem ser confirmados nas fontes oficiais e com esses profissionais, pois normas e procedimentos podem ser atualizados.</p>
+    <nav class="abas" aria-label="Seções"><a href="#roadmap" id="tab-roadmap">Roadmap</a><a href="#glossario" id="tab-glossario">Glossário</a></nav>
+  </header>
+
+  <div class="layout" id="v-roadmap">
+    <section class="card" aria-labelledby="h-perg">
+      <h2 id="h-perg">Sobre o seu projeto</h2>
+      <form id="form" aria-label="Perguntas sobre o projeto"></form>
+    </section>
+
+    <section aria-labelledby="h-road">
+      <div class="card">
+        <h2 id="h-road">Seu roadmap</h2>
+        <div id="resumo"></div>
+        <div id="alertas"></div>
+        <div id="resultado" aria-live="polite"></div>
+        <div class="acoes">
+          <button class="btn sec" id="copiar" type="button">Copiar roadmap em texto</button>
+          <button class="btn sec" id="imprimir" type="button">Imprimir roadmap</button>
+          <span id="msg" role="status"></span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section id="v-glossario" class="card" aria-labelledby="h-gl" hidden><h2 id="h-gl">Glossário</h2><dl class="gloss" id="glossario-full"></dl></section>
+
+  <p class="rodape">Data da última atualização: Novembro de 2026</p>
+</div>
+
+<div id="over" role="presentation">
+  <div id="pop" role="dialog" aria-modal="true" aria-labelledby="pop-t">
+    <h3 id="pop-t"></h3>
+    <p id="pop-d"></p>
+    <button class="btn sec" id="fechar" type="button">Fechar</button>
+  </div>
+</div>
+
+<script>
+/* ---------- Glossário (popups) ---------- */
+const GLOSS = {
+  'data-leakage': {label:'Data Leakage (vazamento de dados)', def:'Ocorrência em que informações que não deveriam estar disponíveis durante o desenvolvimento, treino ou avaliação de um modelo de inteligência artificial são inadvertidamente utilizadas pelo sistema, direta ou indiretamente, influenciando os seus resultados e produzindo estimativas artificialmente otimistas do seu desempenho. Em contexto clínico, pode ocorrer, por exemplo, quando o modelo utiliza informações que só estariam disponíveis após o momento em que a previsão ou decisão clínica deveria ser realizada, ou quando existem dados do mesmo paciente simultaneamente nos conjuntos de treino e teste.'},
+  'padrao-referencia': {label:'padrão de referência', def:'Método, exame, procedimento ou processo de adjudicação usado como referência para determinar a condição clínica ou o desfecho de interesse. Deve ser apropriado à finalidade clínica e, sempre que possível, baseado nas melhores evidências. Pode combinar exames confirmatórios, avaliação de especialistas, seguimento clínico ou resultados anatomopatológicos.'},
+  'teste-indice': {label:'teste índice', def:'Teste diagnóstico novo ou alternativo, cuja acurácia é avaliada comparando seus resultados com os de um teste estabelecido, chamado padrão de referência (tradicionalmente, padrão-ouro).'},
+  'notificacao': {label:'notificação', def:'processo de regularização para dispositivos médicos das classes I e II de risco sanitário'},
+  'registro': {label:'registro', def:'processo de regularização para dispositivos médicos das classes III e IV de risco sanitário'},
+  'proponente': {label:'Instituição Proponente', def:'instituição com a qual o pesquisador responsável tem vínculo e em nome da qual apresenta a pesquisa; corresponsável pela pesquisa e pelas ações do pesquisador. Em projetos multicêntricos e unicêntricos, esta instituição será o Centro Coordenador do estudo.'},
+  'participante': {label:'Instituição Participante', def:'caracteriza uma extensão do Centro Coordenador (Instituição Proponente), ou seja, a pesquisa acontece integral e simultaneamente ao Centro Coordenador. Nesta tem-se um pesquisador responsável específico diferente do Centro Coordenador, o qual deve submeter à pesquisa.'},
+  'coparticipante': {label:'Instituição Coparticipante', def:'compreende-se aquela na qual haverá o desenvolvimento de alguma etapa da pesquisa. Esta é, portanto, uma instituição que participará do projeto, tal qual a proponente, apesar de não o ter proposto, o Pesquisador Responsável por este estudo será sempre o mesmo da Instituição Proponente.'},
+  'dossie': {oculto:true, label:'dossiê', def:'A Anvisa tem o prazo de 90 dias corridos para emitir manifestação - caso contrário, a investigação clínica poderá ser iniciada após as aprovações éticas pertinentes.'},
+  'prognostica': {oculto:true, label:'Prognóstica', def:'O sistema de IA pode responder a perguntas como: “Qual é o risco de deterioração clínica deste paciente nas próximas 24 horas?”; “Qual a probabilidade de malignidade de um nódulo detectado?”'},
+  'fase-inicial': {oculto:true, label:'fase inicial', def:'usado para relato de estudo de avaliação inicial, em pequena escala e de caráter formativo, de um sistema de IA implementado num ambiente clínico real, com foco na utilidade clínica, segurança e fatores humanos, independentemente do desenho do estudo ou da modalidade do sistema (diagnóstico, prognóstico ou terapêutico'},
+  'predicao': {label:'predição', def:'Estimativa de um valor de desfecho ou risco, como a probabilidade de uma condição clínica estar presente ou de um evento futuro ocorrer. Não confundir com o uso em machine learning, cujo conceito é mais amplo, que inclui a estimativa de qualquer variável ou característica a partir dos dados de entrada, independentemente de representar um desfecho clínico.'},
+  'dado-sensivel': {label:'dado pessoal sensível', def:'Dado pessoal sobre origem racial ou étnica, convicção religiosa, opinião política, filiação a sindicato ou a organização de caráter religioso, filosófico ou político, saúde ou vida sexual, dado genético ou biométrico, quando vinculado a uma pessoa natural.'},
+  'tratamento': {label:'tratamento de dados pessoais', def:'Coleta, recepção, classificação, utilização, reprodução, processamento, armazenamento, avaliação ou controle da informação.'},
+  'cep': {label:'CEP', def:'Comitê de Ética em Pesquisa: colegiado interdisciplinar e independente que avalia e acompanha os aspectos éticos de pesquisas com seres humanos no Brasil, garantindo a proteção e a dignidade dos participantes.'},
+  'cep-conep': {label:'Sistema CEP/CONEP', def:'Conjunto de CEPs coordenados pela CONEP (Comissão Nacional de Ética em Pesquisa), uma das comissões do Conselho Nacional de Saúde. Ao analisar um projeto, o sistema se torna corresponsável por proteger os participantes. OBSERVAÇÃO: As mudanças no sistema brasileiro de ética em pesquisa ganharam novo contorno a partir da [Lei nº 14.874](https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/lei/l14874.htm), de maio de 2024, que retirou atribuições da Comissão Nacional de Ética em Pesquisa (Conep) e do Conselho Nacional de Saúde (CNS) e criou a Instância Nacional de Ética em Pesquisa (INAEP), regulamentado pelo Decreto nº 12.651 de outubro de 2025.'},
+  'plataforma': {label:'Plataforma Brasil', def:'O sistema oficial de lançamento de pesquisas para análise e monitoramento do Sistema CEP/CONEP. O pesquisador deve realizar cadastro na Plataforma Brasil para efetuar a submissão do projeto ao CEP. ATENÇÃO: O Ministério da Saúde está construindo, com a escuta de pesquisadores, instituições e Comitês de Ética em Pesquisa, o novo sistema nacional de submissão, análise e acompanhamento de pesquisas que envolvem seres humanos. Nesta página [Nova Plataforma de Pesquisa com Seres Humanos — DECIT/SCTIE/MS](https://cienciasus.gov.br/decit/NDTI/plataforma_sinep/) você acompanha as etapas de desenvolvimento.'},
+  'mariah': {label:'MARIAH', def:'Ferramenta de apoio para identificar, analisar e classificar, de forma proporcional, os riscos éticos do uso de IA em pesquisas com seres humanos. Não aprova nem reprova protocolos, não substitui o CEP e seu preenchimento é facultativo.'},
+  'retrospectivo': {label:'estudo retrospectivo', def:'Usa dados coletados antes do início da investigação, referentes a eventos que já ocorreram, para responder à pergunta de pesquisa.'},
+  'prospectivo': {label:'estudo prospectivo', def:'Define previamente um protocolo e coleta dados a partir do início do estudo, acompanhando os eventos seguintes.'},
+  'naorandom': {label:'estudo clínico não randomizado', def:'É uma pesquisa experimental em que o pesquisador intervém ativamente, definindo a conduta em saúde de cada participante sem sorteio aleatório. A alocação pode ser feita por critério do pesquisador, por conveniência ou por outro método não aleatório.'},
+  'braco-unico': {label:'estudo de braço único', def:'É uma pesquisa experimental em que todos os participantes recebem a mesma conduta em saúde definida pelo pesquisador. Não há sorteio nem grupo de comparação concorrente, e os resultados costumam ser comparados com dados históricos ou com um padrão já conhecido.'},
+  'observacional': {label:'estudo observacional', def:'É uma pesquisa em que o pesquisador não interfere na conduta em saúde dos participantes. Ele apenas acompanha ou registra o que ocorre naturalmente na prática clínica.'},
+  'ecr': {label:'estudo clínico randomizado', def:'É uma pesquisa experimental em que o pesquisador intervém ativamente, definindo por sorteio aleatório quem será submetido a uma conduta em saúde (como um medicamento, cirurgia, dieta ou teste diagnóstico) e quem ficará no grupo de comparação. Diferencia-se do estudo observacional, no qual o pesquisador não interfere na escolha dessa conduta, limitando-se a acompanhar o que ocorre naturalmente na prática clínica.'}
+};
+
+/* ---------- Perguntas ---------- */
+const QS = [
+  {name:'dev', type:'radio', q:'Como o modelo de IA foi ou será desenvolvido neste estudo?', def:'pretrained', opts:[
+    ['scratch','Desenvolvimento e treino do zero'],
+    ['adapt','Adaptação de modelo pré-treinado'],
+    ['pretrained','Modelo pré-treinado, sem adaptações (a versão final já existia antes do estudo)']]},
+  {name:'clin', type:'radio', q:'Neste estágio, o sistema de IA será usado como intervenção em contexto clínico real, isto é, com suas saídas utilizadas no cuidado de pacientes em serviço de saúde? Se houver apenas coleta de dados, sem uso das saídas no atendimento, responda não.', def:'nao', opts:[
+    ['sim','Sim'],['nao','Não']]},
+  {name:'purpose', type:'check', q:'Qual(is) finalidade(s) clínicas do sistema mais se encaixam no seu caso?', def:['diag'], opts:[
+    ['diag','Diagnóstica','Ex.: “O paciente tem pneumonia?”'],
+    ['prog','{{prognostica}}',''],
+    ['ther','Terapêutica','Ex.: “Qual é a melhor intervenção para este paciente?”']]},
+  {name:'imagem', type:'radio', q:'O sistema de IA envolve uso de imagens médicas?', def:'nao', opts:[
+    ['sim','Sim'],['nao','Não']]},
+  {name:'anvisa', type:'radio', q:'Você busca regularização na ANVISA para o sistema de IA em validação?', def:'nao', opts:[
+    ['sim','Sim'],['nao','Não']]},
+  {name:'post', type:'radio', q:'O sistema já está em uso no mercado e o objetivo é o monitoramento pós-comercialização?', def:'nao', opts:[
+    ['sim','Sim'],['nao','Não']]},
+  {name:'risk', type:'radio', q:'O sistema de IA é utilizado para tomada de decisões, com fins terapêuticos ou de diagnóstico, cujo impacto pode causar', lista:[
+    'a morte ou uma deterioração irreversível do estado de saúde de uma pessoa;',
+    'uma deterioração grave do estado de saúde de uma pessoa ou uma intervenção cirúrgica;',
+    'Ou quando se destinar ao monitoramento de parâmetros fisiológicos vitais, a natureza das variações desses parâmetros possa resultar em perigo imediato para o paciente;'], pergunta:'Algum dos itens acima se aplica ao sistema de IA do seu projeto?', def:'nenhum', opts:[
+    ['alto','Sim, para uma ou mais das opções'],['nenhum','Não se aplica para nenhum dos casos acima']]},
+  {name:'pdata', type:'radio', q:'Haverá {{tratamento}} no projeto?', def:'sim', opts:[
+    ['sim','Sim'],['nao','Não']]},
+  {name:'brief', type:'radio', q:'Deseja que os itens do roadmap contenham descrições breves?', def:'sim', opts:[
+    ['sim','Sim'],['nao','Não']]}
+];
+
+/* ---------- Conteúdo do documento de origem ---------- */
+const PURP = {diag:'Diagnóstica', prog:'Prognóstica', ther:'Terapêutica'};
+const DEV = {scratch:'Desenvolvimento e treino do zero', adapt:'Adaptação de modelo pré-treinado', pretrained:'Modelo pré-treinado sem adaptações'};
+
+const DATA_LEAK = [
+  'Definir claramente o momento em que a IA deverá produzir sua predição.',
+  'Garantir que todas as variáveis de entrada estavam disponíveis naquele momento.',
+  'Separar os conjuntos de treinamento, validação (otimização) e teste por paciente, quando aplicável.',
+  'Evitar que imagens ou exames duplicados apareçam em diferentes conjuntos.',
+  'Realizar pré-processamento e seleção de variáveis sem usar informações do conjunto de teste.',
+  'Verificar se existe relação direta ou indireta entre os preditores e o [[padrao-referencia]].',
+  'Documentar a estratégia de divisão dos dados.'
+];
+
+const REFS = {
+  'CONSORT-AI': {tipo:'Usar em para relato de ensaios clínicos randomizados com IA', url:'https://www.nature.com/articles/s41591-020-1034-x'},
+  'SPIRIT-AI': {tipo:'Usar para relato de protocolo de ensaios clínicos com IA', url:'https://www.nature.com/articles/s41591-020-1037-7'},
+  'DECIDE-AI': {tipo:'Usar em caso de relato de avaliação clínica em fase inicial para avaliar o desempenho clínico real de um sistema de IA em pequena escala, garantir sua segurança, avaliar os fatores humanos que cercam seu uso e abrir caminho para ensaios de maior escala.', url:'https://www.nature.com/articles/s41591-022-01772-9'},
+  'TRIPOD-AI': {tipo:'Relato de modelos de {{predicao|predição}} com IA', url:'https://www.bmj.com/content/385/bmj-2023-078378'},
+  'STARD-AI': {tipo:'Relato de estudos de acurácia diagnóstica com IA', url:'https://www.nature.com/articles/s41591-025-03953-8'},
+  'CLAIM': {tipo:'Relato de estudos de IA com imagens médicas', url:'https://rsna.github.io/claim/'},
+  'RDC 657/2022': {tipo:'Software como Dispositivo Médico (SaMD)', url:'https://www.in.gov.br/en/web/dou/-/resolucao-de-diretoria-colegiada-rdc-n-657-de-24-de-marco-de-2022-389603457'},
+  'RDC 751/2022': {tipo:'Classificação de risco, regimes de notificação e registro, rotulagem e instruções de uso', url:'https://www.in.gov.br/en/web/dou/-/resolucao-rdc-n-751-de-15-de-setembro-de-2022-430797145'},
+  'RDC 837/2023': {tipo:'Investigações clínicas com dispositivos médicos', url:'https://www.in.gov.br/en/web/dou/-/resolucao-rdc-n-837-de-13-de-dezembro-de-2023-531016643'},
+  'RDC 665/2022': {tipo:'Boas Práticas de Fabricação de Produtos Médicos', url:'https://www.in.gov.br/en/web/dou/-/resolucao-rdc-n-665-de-30-de-marco-de-2022-389909119'},
+  'EU MDR Anexo III': {tipo:'Documentação técnica de vigilância pós-mercado (União Europeia)', url:'https://www.medical-device-regulation.eu/2019/07/25/annex-iii/'},
+  'LGPD': {tipo:'Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018)', url:'https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm'},
+  'Manual Plataforma Brasil': {tipo:'Manual do Pesquisador, versão 3.8', url:'https://www.gov.br/conselho-nacional-de-saude/pt-br/camaras-tecnicas-e-comissoes/conep/plataforma-brasil/manuais/manual-do-pesquisador-versao-3.8/view'},
+  'MARIAH': {tipo:'A MARIAH é um módulo operacional que apoia o {{cep|CEP}} na identificação, classificação e documentação dos riscos associados ao uso de inteligência artificial em pesquisas com seres humanos. Não substitui a análise ética nem decide sobre a aprovação dos protocolos, mas estrutura a avaliação e apoia a proporcionalidade dos requisitos e a rastreabilidade das deliberações.', url:'https://cienciasus.gov.br/decit/mariah/'}
+};
+
+/* ---------- Lógica: uma resposta só gera itens se a coluna de referência dela não estiver vazia ---------- */
+function answers(){
+  const f = document.getElementById('form');
+  const one = n => { const el = f.querySelector(`[name="${n}"]:checked`); return el ? el.value : null; };
+  return {
+    dev: one('dev'), clin: one('clin') === 'sim',
+    purpose: [...f.querySelectorAll('[name="purpose"]:checked')].map(e => e.value),
+    formative: one('formative') === 'sim', stage: one('stage'),
+    imagem: one('imagem') === 'sim', post: one('anvisa') !== 'sim' && one('post') === 'sim', anvisa: one('anvisa') === 'sim',
+    risk: one('risk') === 'alto', pdata: one('pdata') === 'sim',
+    brief: one('brief') !== 'nao'
+  };
+}
+
+function build(a){
+  const grupos = [];
+  const usados = new Set();              // cada norma aparece uma vez, sob a primeira resposta que a ativa
+  const ref = n => ({ref:n});
+  const add = (pergunta, resposta, itens, nota) => {
+    const novos = [];
+    itens.forEach(it => {
+      if (it.ref) { if (usados.has(it.ref)) return; usados.add(it.ref); }
+      novos.push(it);
+    });
+    if (novos.length || nota) grupos.push({pergunta, resposta, itens: novos, nota});
+  };
+
+  // a) desenvolvimento: só "do zero" e "adaptação" têm checklist na coluna de referência
+  if (a.dev === 'scratch' || a.dev === 'adapt')
+    add('Como o modelo foi desenvolvido', DEV[a.dev], [{titulo:'Checklist para Prevenção de {{data-leakage|Data Leakage}}', subitens: DATA_LEAK}]);
+
+  // Uso clínico
+  add('Neste estágio, o sistema de IA será usado como intervenção em contexto clínico real?', a.clin ? 'Sim' : 'Não',
+      (a.clin ? ['CONSORT-AI','SPIRIT-AI','DECIDE-AI'] : []).map(ref));
+
+  // Finalidade
+  const finalidades = a.purpose.map(p => PURP[p]);
+  const refsFin = [];
+  if (a.purpose.includes('diag')) refsFin.push('STARD-AI');
+  if (a.purpose.includes('prog') || a.purpose.includes('ther')) refsFin.push('TRIPOD-AI');
+  if (finalidades.length) add('Finalidade clínica', finalidades.join(', '), refsFin.map(ref));
+  if (a.imagem) add('O sistema de IA envolve uso de imagens médicas?', 'Sim', [ref('CLAIM')]);
+
+  // Pós-comercialização: só o "Sim" tem referência
+  if (a.post) add('Monitoramento pós-comercialização', 'Sim', [{ref:'RDC 657/2022', obs:'Art.23 e 24'}, {ref:'EU MDR Anexo III', pre:'Considere consultar:'}]);
+
+  // ANVISA: só o "Sim" tem referência
+  if (a.anvisa) add('Regularização na ANVISA', 'Sim', [ref('RDC 657/2022'), ref('RDC 751/2022'), ref('RDC 665/2022'), {texto:'Definir se irá se habilitar para ser fabricante legal do dispositivo médico ou buscará uma terceirizada', curto:'Definir se será fabricante legal ou contratar uma terceirizada'}, {texto:'Emitir Autorização de Funcionamento (AFE) pela Anvisa, para fabricação de dispositivos médicos', curto:'Obter Autorização de Funcionamento (AFE) na Anvisa', nivel:2}, {texto:'Emitir Certificado de Boas Práticas de Fabricação (CBPF) pela Anvisa', curto:'Obter Certificado de Boas Práticas de Fabricação (CBPF) na Anvisa', nivel:2}, {texto:'Definir detentor da {{notificacao|notificação}} ou {{registro|registro}} do dispositivo médico', curto:'Definir o detentor da {{notificacao|notificação}} ou do {{registro|registro}}'}, {texto:'Emitir certificado de Inscrição de Pessoa Jurídica (emitida pelo Conselho Profissional ao detentor com indicação do profissional responsável)', curto:'Obter certificado de Inscrição de Pessoa Jurídica no Conselho Profissional'}, {texto:'Emitir Licença Sanitária pela VISA local (Vigilância Sanitária Municipal ou Coordenadoria de Vigilância Sanitária)', curto:'Obter Licença Sanitária na VISA local'}]);
+
+  // Impacto de risco
+  const impacto = 'Impacto potencialmente grave (morte, deterioração irreversível, cirurgia ou perigo imediato)';
+  if (a.risk) add(impacto, 'Sim, para uma ou mais das opções',
+      [ref('RDC 657/2022'), ref('RDC 751/2022'), ref('RDC 837/2023'), {texto:'Preparar submissão de {{dossie|dossiê}} de investigação clínica de dispositivo médico (DICD) perante a Anvisa, por se tratar de um dispositivo médico de classe III ou IV'}, {texto:'Considerar estudos transversais, cuja coleta de dados é realizada de forma prospectiva'}, {texto:'Considerar realização de desenhos de estudos prospectivos (observacionais ou intervencionais), como o de coorte prospectivo ou ensaio clínico randomizado'}],
+      'Classificação de risco preliminar do sistema de IA → Classe de risco: III ou IV.\nImportante: recomenda-se realizar uma consulta formal à Anvisa para confirmar a classificação de risco sanitária.');
+  else add(impacto, 'Não se aplica para nenhum dos casos acima',
+      [ref('RDC 657/2022'), ref('RDC 751/2022')],
+      'Classificação de risco preliminar do sistema de IA → Classe de risco: I ou II.\nImportante: recomenda-se realizar uma consulta formal à Anvisa para confirmar a classificação de risco sanitária.');
+
+  // Dados pessoais: só o "Sim" tem referência
+  if (a.pdata) add('Tratamento de dados pessoais', 'Sim', [ref('LGPD')]);
+
+  const alerts = [];
+
+  add('Submissão ao {{cep|CEP}}', '', [ref('Manual Plataforma Brasil'), {texto:'Cadastrar Novo Usuário'}, {texto:'Cadastrar Instituição ({{proponente|Instituição Proponente}}, {{participante|Instituição Participante}}, {{coparticipante|Instituição Coparticipante}})'}, {texto:'Cadastrar Projeto'}, ref('MARIAH')]);
+
+  return {grupos, alerts, totalNormas: usados.size + (grupos.some(g => g.itens.some(i => i.titulo)) ? 1 : 0)};
+}
+
+/* ---------- Marcações (apenas neste navegador) ---------- */
+const KEY = 'roadmap-validacao-marcacoes';
+function loadChecks(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } }
+function saveChecks(o){ try { localStorage.setItem(KEY, JSON.stringify(o)); } catch(e){} }
+
+/* ---------- Renderização ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function rich(s){
+  return esc(s).replace(/\[\[([a-z-]+)\]\]/g, (m, k) => `<button type="button" class="term" data-k="${k}">${GLOSS[k].label}</button>`);
+}
+
+function hintify(s){
+  return esc(s).replace(/\{\{([a-z-]+)(?:\|([^}]+))?\}\}/g, (m, k, lbl) => `<span class="hint" tabindex="0">${lbl || GLOSS[k].label}<span class="hint-pop" role="tooltip">${esc(GLOSS[k].def).replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')}</span></span>`);
+}
+
+function renderForm(){
+  const form = document.getElementById('form');
+  form.innerHTML = QS.map(q => {
+    if (q.type === 'radio') {
+      const opts = q.opts.map(([v, l]) => `<label class="opt"><input type="radio" name="${q.name}" value="${v}" ${q.def === v ? 'checked' : ''}><span>${esc(l)}</span></label>`).join('');
+      const cls = q.name === 'brief' ? ' class="bloco-nivel"' : '';
+      const lista = q.lista ? `<ul class="lista">${q.lista.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : '';
+      const pergunta = q.pergunta ? `<p class="pergunta">${esc(q.pergunta)}</p>` : '';
+      return `<fieldset${cls}><legend>${hintify(q.q)}</legend>${lista}${pergunta}${opts}</fieldset>`;
+    }
+    const opts = q.opts.map(([v, l, hint]) => `<label class="opt"><input type="checkbox" name="${q.name}" value="${v}" ${q.def.includes(v) ? 'checked' : ''}><span>${hintify(l)}<small>${esc(hint)}</small></span></label>`).join('');
+    return `<fieldset><legend>${esc(q.q)}</legend>${opts}</fieldset>`;
+  }).join('');
+}
+
+function checkRow(k, inner, st){
+  return `<li><label><input type="checkbox" data-id="${esc(k)}" ${st[k] ? 'checked' : ''}><span>${inner}</span></label></li>`;
+}
+
+function itemHtml(it, st, showTipo){
+  if (it.texto) {
+    const txt = (!window.__briefOn && it.curto) ? it.curto : it.texto;
+    return `<li style="margin-left:${it.nivel === 2 ? 52 : 26}px"><label><input type="checkbox" data-id="${esc('txt:' + it.texto)}" ${st['txt:' + it.texto] ? 'checked' : ''}><span>${hintify(txt)}</span></label></li>`;
+  }
+  if (it.ref) {
+    const r = REFS[it.ref];
+    return checkRow('ref:' + it.ref,
+      `${it.pre ? esc(it.pre) + ' ' : ''}<strong>${hintify(it.ref.replace('DECIDE-AI', '{{fase-inicial|DECIDE-AI}}').replace('Plataforma Brasil', '{{plataforma|Plataforma Brasil}}'))}</strong>${showTipo ? ` — ${hintify(r.tipo)}` : ''}${it.obs ? ` <span class="motivo">${esc(it.obs)}</span>` : ''}${r.url ? ` · <a href="${r.url}" target="_blank" rel="noopener">abrir fonte</a>` : ''}`, st);
+  }
+  return `<li class="bloco"><strong>${hintify(it.titulo)}</strong><ul class="itens sub">${it.subitens.map(s => checkRow('dl:' + s, rich(s), st)).join('')}</ul></li>`;
+}
+
+function render(){
+  const anvSim = document.querySelector('[name="anvisa"]:checked')?.value === 'sim';
+  const postFs = document.querySelector('[name="post"]')?.closest('fieldset');
+  if (postFs) postFs.hidden = anvSim;
+  const a = answers();
+  const {grupos, alerts, totalNormas} = build(a);
+  const st = loadChecks();
+  const showTipo = a.brief;
+  window.__briefOn = a.brief;
+
+  document.getElementById('resumo').innerHTML = `
+    <div class="chips">
+      <span class="chip">${grupos.length} respostas com itens</span>
+      <span class="chip">${totalNormas} normas e checklists</span>
+      <span class="chip">Descrições breves: ${a.brief ? 'sim' : 'não'}</span>
+    </div>`;
+
+  document.getElementById('alertas').innerHTML = alerts.map(t => `<div class="alert" role="note">${esc(t)}</div>`).join('');
+
+  document.getElementById('resultado').innerHTML = grupos.length
+    ? grupos.map(g => `
+        <article class="grupo">
+          <h3>${hintify(g.pergunta)}</h3>
+          ${g.resposta ? `<p class="resp">Resposta: ${esc(g.resposta)}</p>` : ''}
+          ${g.nota ? `<p class="nota">${esc(g.nota)}</p>` : ''}
+          <ul class="itens">${g.itens.map(it => itemHtml(it, st, showTipo)).join('')}</ul>
+        </article>`).join('')
+    : `<p class="vazio">Nenhuma das suas respostas tem norma ou checklist associado, então o roadmap está vazio. Ajuste as respostas para ver os itens.</p>`;
+
+  window.__roadmap = {grupos, alerts, a};
+}
+
+function buildText(){
+  const d = window.__roadmap; if (!d) return '';
+  const strip = s => s.replace(/\{\{([a-z-]+)(?:\|([^}]+))?\}\}/g, (m, k, l) => l || GLOSS[k].label);
+  const L = ['ROADMAP DE VALIDAÇÃO CLÍNICA DE IA EM SAÚDE', ''];
+  d.alerts.forEach(t => L.push('AVISO: ' + t, ''));
+  d.grupos.forEach(g => {
+    const pg = strip(g.pergunta);
+    L.push(g.resposta ? `${pg} — ${g.resposta}` : pg);
+    if (g.nota) L.push(g.nota);
+    g.itens.forEach(it => {
+      if (it.ref) L.push(`  [ ] ${it.ref}: ${strip(REFS[it.ref].tipo)}${REFS[it.ref].url ? ' (' + REFS[it.ref].url + ')' : ''}${it.obs ? ' ' + it.obs : ''}`);
+      else if (it.texto) L.push(`      [ ] ${strip(!d.a.brief && it.curto ? it.curto : it.texto)}`);
+      else {
+        L.push(`  [ ] ${strip(it.titulo)}`);
+        it.subitens.forEach(s => L.push('      [ ] ' + s.replace(/\[\[([a-z-]+)\]\]/g, (m, k) => GLOSS[k].label)));
+      }
+    });
+    L.push('');
+  });
+  L.push('Esta ferramenta orienta o planejamento com base nas suas respostas e não substitui a análise do CEP ou da INAEP, a avaliação da ANVISA, a orientação jurídica nem a revisão de especialistas em regulação, ética em pesquisa, proteção de dados, ciência de dados e metodologia de pesquisa clínica.');
+  return L.join('\n');
+}
+
+function renderGlossary(){
+  document.getElementById('glossario-full').innerHTML = Object.values(GLOSS).filter(g => !g.oculto).map(g => `<dt>${esc(g.label)}</dt><dd>${esc(g.def).replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')}</dd>`).join('');
+}
+
+function openGloss(k){
+  const g = GLOSS[k]; if (!g) return;
+  document.getElementById('pop-t').textContent = g.label;
+  document.getElementById('pop-d').textContent = g.def;
+  document.getElementById('over').classList.add('on');
+  document.getElementById('fechar').focus();
+}
+function closeGloss(){ document.getElementById('over').classList.remove('on'); }
+
+/* ---------- Eventos ---------- */
+document.addEventListener('click', e => {
+  const t = e.target.closest('.term');
+  if (t) { openGloss(t.dataset.k); return; }
+  if (e.target.id === 'fechar' || e.target.id === 'over') closeGloss();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGloss(); });
+document.getElementById('form').addEventListener('change', render);
+document.getElementById('resultado').addEventListener('change', e => {
+  if (e.target.matches('input[type="checkbox"][data-id]')) {
+    const st = loadChecks(); st[e.target.dataset.id] = e.target.checked; saveChecks(st);
+  }
+});
+
+document.getElementById('copiar').addEventListener('click', async () => {
+  const txt = buildText();
+  const msg = document.getElementById('msg');
+  try {
+    await navigator.clipboard.writeText(txt);
+    msg.textContent = 'Roadmap copiado.';
+  } catch (err) {
+    const ta = document.createElement('textarea');
+    ta.value = txt; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch (e2) {}
+    ta.remove();
+    msg.textContent = ok ? 'Roadmap copiado.' : 'Não foi possível copiar. Selecione o texto manualmente.';
+  }
+});
+
+document.getElementById('imprimir').addEventListener('click', () => {
+  try { window.print(); }
+  catch (err) { document.getElementById('msg').textContent = 'Impressão indisponível aqui. Abra o arquivo no navegador.'; }
+});
+
+/* ---------- Navegação entre as duas páginas (por #hash) ---------- */
+function show(glos){
+  document.getElementById('v-roadmap').hidden = glos;
+  document.getElementById('v-glossario').hidden = !glos;
+  document.getElementById('tab-roadmap').removeAttribute('aria-current');
+  document.getElementById('tab-glossario').removeAttribute('aria-current');
+  document.getElementById(glos ? 'tab-glossario' : 'tab-roadmap').setAttribute('aria-current', 'page');
+  document.title = glos ? 'Glossário — Roadmap de validação clínica de IA' : 'Roadmap de validação clínica de IA';
+  window.scrollTo(0, 0);
+}
+function route(){ show(location.hash === '#glossario'); }
+document.querySelectorAll('.abas a').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  show(a.id === 'tab-glossario');
+  try { history.replaceState(null, '', a.getAttribute('href')); } catch (err) {}
+}));
+
+/* ---------- Início ---------- */
+renderForm();
+renderGlossary();
+window.addEventListener('hashchange', route);
+route();
+render();
+</script>
+</body>
+</html>
